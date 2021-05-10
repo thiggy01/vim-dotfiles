@@ -31,6 +31,7 @@ set shiftwidth=2 " Number of spaces inserted when using indentation commands.
 set tabstop=4 " Number os spaces inserted when pressing tab.
 set list " Enable the list mode in order to show tab and space as characters.
 set listchars=tab:\|\ ,trail:- " change tab and trail spaces to >- and - chars.
+set foldmethod=indent " Set the default fold method to indent.
 " 1}}}
 
 " Advanced Settings
@@ -53,40 +54,33 @@ set completeopt-=preview
 highlight CursorLine term=bold cterm=bold ctermbg=238
 highlight CursorLineNr term=bold cterm=bold ctermbg=238
 
-" Exit the completion popup menu with Esc.
-inoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
-" Select the highlighted item on the popup menu with Enter.
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
 " Main autocommand group.
 augroup advanced
-    autocmd!
-" Avoid highlighting the last search when sourcing vimrc.
-    autocmd BufEnter * set hlsearch
-" Jump to the last cursor posiion when you reopen a file or source .vimrc.
-    autocmd BufRead * :normal! `"
-" Jump to the last edited position when sourcing .vimrc.
-    autocmd SourcePost * :silent! normal! `.
-" Remove all trailing white spaces from file when saved.
-    autocmd BufWrite * :silent! %s/\s\+$//
-" Override colorscheme cursor line highlighting default configuration.
-    autocmd ColorScheme * highlight CursorLine term=bold cterm=bold ctermbg=238
-    autocmd ColorScheme * highlight CursorLineNr term=bold cterm=bold ctermbg=238
-" Set the default fold method to indent.
-    autocmd BufReadPre * setlocal foldmethod=indent
-" Also set the marker fold method and open all folds.
-    autocmd BufWinEnter * if &fdm ==  'indent' | setlocal foldmethod=marker | exe ":normal zR"
-    \| endif
-" Set the auto-complete configuration.
-    autocmd Filetype *
-    \|  if &omnifunc == ""
-    \|     setlocal omnifunc=syntaxcomplete#Complete
-    \| endif
-    \| if &omnifunc != ''
-    \|     call SuperTabChain(&omnifunc, "<C-n>")
-    \| endif
+		autocmd!
+		" Avoid highlighting the last search when sourcing vimrc.
+		autocmd BufEnter * set hlsearch
+		" Jump to the last cursor posiion when you reopen a file.
+		autocmd BufRead * :normal! `"
+		" Jump to the last edited position when sourcing .vimrc.
+		autocmd SourcePost * :silent! normal! `.
+		" Open all indented folds.
+		autocmd BufRead * :normal! zR
+		" Remove all trailing white spaces from file when saved.
+		autocmd BufWrite * :normal! %s/\s\+$//<CR>
+		" Override colorscheme cursor line highlighting default configuration.
+		autocmd ColorScheme * highlight CursorLine term=bold cterm=bold ctermbg=238
+		autocmd ColorScheme * highlight CursorLineNr term=bold cterm=bold ctermbg=238
+		" Set the auto-complete configuration.
+		autocmd Filetype *
+		\| if &omnifunc == ""
+		\|		 setlocal omnifunc=syntaxcomplete#Complete
+		\| endif
+		\| if &omnifunc != ''
+		\|		 call SuperTabChain(&omnifunc, "<C-n>")
+		\| endif
 augroup END
 " 1}}}
+
 
 " Specific Settings
 " {{{1
@@ -136,8 +130,8 @@ let g:closetag_filenames = '*.htm, *.html, *.xhtml, *.phtml, *.js, *.jsx'
 
 " Draw a NERDTree explorer when opening something with vim.
 " augroup project_explorer
-"   autocmd!
-"   autocmd VimEnter * :NERDTree
+"		autocmd!
+"		autocmd VimEnter * :NERDTree
 " augroup END
 
 " Filetype settings.
@@ -145,11 +139,11 @@ let g:closetag_filenames = '*.htm, *.html, *.xhtml, *.phtml, *.js, *.jsx'
 
 " Specific filetype commands.
 augroup filetype_commands
-    autocmd!
-    " Stop vim from autocommenting on vimscripts.
-    autocmd Filetype vim set formatoptions-=cro
-    " Set indentation of 2 spaces for javascript.
-    autocmd Filetype javascript,javascriptreact,json,html,xhtml set shiftwidth=2 tabstop=2
+		autocmd!
+		" Stop vim from autocommenting on vimscripts.
+		autocmd Filetype vim set formatoptions-=cro foldmethod=marker | exe "normal zR"
+		" Set indentation of 2 spaces for javascript.
+		autocmd Filetype javascript,javascriptreact,json,html,xhtml set shiftwidth=2 tabstop=2
 augroup END
 " 2}}}
 " 1}}}
@@ -163,10 +157,11 @@ augroup END
 let mapleader = " "
 
 " copy, cut and paste keys from/to clipboard.
+" Need to instal vim-gtk3 for this to work.
 " Movement pending copy and cut.
 noremap <leader>c "+y
 noremap <leader>x "+d
-" Paste content before the cursos.
+" Paste content after the cursor.
 noremap <leader>v "+p
 "2}}}
 
@@ -184,11 +179,16 @@ inoremap <C-x>n <C-x><C-n>
 " Context-aware line completion.
 inoremap <C-x>l <C-x><C-l>
 
+" Exit the completion popup menu with Esc.
+inoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
+" Select the highlighted item on the popup menu with Enter.
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
 " " Braces, brackets and parentheses expansion.
 " inoremap {<CR> {<CR>}<Esc>O
 " inoremap [<CR> [<CR>]<Esc>O
 " inoremap (<CR> (<CR>)<Esc>O
-" inoremap ><CR>  ><CR><Esc>O
+" inoremap ><CR>	><CR><Esc>O
 " 2}}}
 
 " Normal mode
@@ -206,14 +206,14 @@ nnoremap <leader>h :help<Space>
 
 " Open and source .vimrc on the go.
 nnoremap <leader>evr :edit $MYVIMRC<CR>
-nnoremap <leader>svr :source $MYVIMRC<CR>
+nnoremap <leader>svr :source $MYVIMRC \| e %<CR>
 
 " Disable highlighted matches after searching.
 nnoremap <silent> <leader><CR> :nohlsearch<CR>
 " Enable or disable spellchecking.
-nnoremap <leader>spc :set spell! spelllang=en_us<CR>
+nnoremap <leader>spc :silent! set spell! spelllang=en_us<CR>
 " Toggle relative and absolute line number.
-nnoremap <leader>ln :set relativenumber! number!<CR>
+nnoremap <leader>ln :silent! set relativenumber! number!<CR>
 
 " Buffer navigation commands mapping.
 " Go to the alternate buffer.
@@ -274,34 +274,35 @@ cnoremap <C-d> <Del>
 " Complex
 " {{{2
 " Fix the behavior of the inner tag object to indent as expected.
+" This solution was posted by @jair-lópez on https://vi.stackexchange.com/q/13050/25511
 function! FixInnerTag()
-    " Get the position of the first line of the selected inner tag object.
-    let openingMark =  getpos("'<")
-    " Get the position of the last line of the selected inner tag object.
-    let closingMark = getpos("'>")
-    " Check whether both marks are on the same line.
-    if openingMark[1] != closingMark[1]
+		" Get the position of the first line of the selected inner tag object.
+		let openingMark =  getpos("'<")
+		" Get the position of the last line of the selected inner tag object.
+		let closingMark = getpos("'>")
+		" Check whether both marks are on the same line.
+		if openingMark[1] != closingMark[1]
 	" Get the lines where the marks are on.
 	let openingLine = getline(openingMark[1])
 	let closingLine = getline(closingMark[1])
 	" Check whether there's nothing appended to the opening tag.
-	if match( openingLine, '\S',  openingMark[2] - 1) == -1
-	    " Check whether the closing tag is at the beginning of the line.
-	    if match( closingLine, "$" ) + 1  ==  closingMark[2]
+	if match( openingLine, '\S',	openingMark[2] - 1) == -1
+			" Check whether the closing tag is at the beginning of the line.
+			if match( closingLine, "$" ) + 1	==	closingMark[2]
 		" Restore and adjust the last Visual area.
 		normal! gvVojo
 		return
-	    " Check whether there's nothing prepended to the closing tag.
-	    elseif  match( closingLine, '\S\%<' . closingMark[2] . "c" ) == -1
+			" Check whether there's nothing prepended to the closing tag.
+			elseif	match( closingLine, '\S\%<' . closingMark[2] . "c" ) == -1
 		" Restore and adjust the last Visual area.
 		normal! gvVkojo
 		return
-	    endif
+			endif
 	endif
-    else
+		else
 	" Do nothing. Restore the last Visual area.
 	normal! gv
-    endif
+		endif
 endfunction
 " Call the fix so the it object runs as expected.
 omap it :normal vit<CR>

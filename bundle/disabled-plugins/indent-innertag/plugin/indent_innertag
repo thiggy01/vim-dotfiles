@@ -1,0 +1,20 @@
+function! IndentInnerTag()
+    " Get the position of the first line of the selected inner tag object.
+    let openingMark =  getpos("'<")
+
+    " Get the position of the last line of the selected inner tag object.
+    let closingMark = getpos("'>")
+
+    " Check whether both marks are on the same line.
+    if openingMark[1] != closingMark[1]
+	" Restore and adjust the last Visual area.
+	normal! gvVkojo
+    else
+	" Do nothing. Restore the last Visual area.
+	normal! gv
+    endif
+endfunction
+
+" Call the fix so the it object runs as expected.
+omap it :normal vit<CR>
+vnoremap it it:<C-u>call IndentInnerTag()<CR>
