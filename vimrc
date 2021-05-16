@@ -29,12 +29,13 @@ set autowriteall " Automatically write to files on specific commands.
 set backspace=indent,eol,start " Allow a more powerful backspacing.
 set tabstop=4 " Number os spaces inserted when pressing tab.
 set shiftwidth=4 " Number of spaces inserted when using indentation commands.
-set expandtab " Expand tab to spaces when autoindent is on.
 set autoindent " Copy indent from current line when starting a new line.
+set expandtab " Expand tab to spaces when autoindent is on.
+let g:vim_indent_cont = &sw " Set line continuation indentation to shiftwidth.
 set list " Enable the list mode in order to show tab and space as characters.
 set listchars=tab:\|\ ,trail:- " change tab and trail spaces to >- and - chars.
 set foldmethod=indent " Set the default fold method to indent.
-" 1}}}
+" }}}
 
 " Advanced Settings
 " {{{1
@@ -44,10 +45,6 @@ filetype plugin indent on
 
 " Set syntax highlighting on.
 syntax enable
-
-" React to the syntax of the code you are editing.
-" set autoindent " Apply indentation of current line to the next one.
-" set smartindent
 
 " Remove a preview window during autocompletion.
 set completeopt-=preview
@@ -59,14 +56,14 @@ highlight CursorLineNr term=bold cterm=bold ctermbg=238
 " Main autocommand group.
 augroup advanced
     autocmd!
-    " Avoid highlighting the last search when sourcing vimrc.
-    autocmd BufEnter * set hlsearch
     " Jump to the last cursor posiion when you reopen a file.
     autocmd BufRead * :normal! `"
-    " Jump to the last edited position when sourcing .vimrc.
-    autocmd SourcePost * :silent! normal! `.
-    " Open all indented folds.
+     " Open all indented folds.
     autocmd BufRead * :normal! zR
+     " Jump to the last edited position when sourcing .vimrc.
+    autocm SourcePost * :silent! normal! `.
+    " Avoid highlighting the last search when sourcing vimrc.
+    autocmd BufEnter * setlocal hlsearch
     " Remove all trailing white spaces from file when saved.
     autocmd BufWritePre * :silent! %s/\s\+$//
     " Override colorscheme cursor line highlighting default configuration.
@@ -82,7 +79,6 @@ augroup advanced
     \| endif
 augroup END
 " 1}}}
-
 
 " Specific Settings
 " {{{1
@@ -123,7 +119,7 @@ let g:netrw_liststyle = 3
 " Remove the directory banner permanently.
 let g:netrw_banner = 0
 " Open files in a vertical split window.
-let g:netrw_browse_split = 2
+le g:netrw_browse_split = 2
 " Set the width of the explorer to 25% of the page.
 let g:netrw_winsize = 25
 
@@ -139,18 +135,19 @@ let g:closetag_filenames = '*.htm, *.html, *.xhtml, *.phtml, *.js, *.jsx'
 " Filetype settings.
 " {{{2
 
-" Specific filetype commands.
+" Specifi filetype commands.
 augroup filetype_commands
-    autocmd!
+    autocm!
     " Stop vim from autocommenting on vimscripts.
-    autocmd Filetype vim set formatoptions-=cro foldmethod=marker | exe "normal zR"
+    autocmd Filetype vim setlocal formatoptions-=cro foldmethod=marker
     " Set indentation of 2 spaces for javascript.
-    autocmd Filetype javascript,javascriptreact,json,html,xhtml set shiftwidth=2 tabstop=2
+    autocmd Filetype javascript,javascriptreact,json,html,xhtml setlocal tabstop=2 shiftwidth=2
+    \| execute "normal zR"
 augroup END
 " 2}}}
 " 1}}}
 
-" Key Mappings
+" Ke Mappings
 " {{{1
 
 " General
@@ -204,7 +201,7 @@ nnoremap <leader>O O<Esc>kS
 nnoremap <leader>m :call cursor(0, len(getline('.'))/2)<CR>
 
 " open a help topic.
-nnoremap <leader>h :help<Space>
+nnorema <leader>h :help<Space>
 
 " Open and source .vimrc on the go.
 nnoremap <leader>evr :edit $MYVIMRC<CR>
