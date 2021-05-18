@@ -35,8 +35,9 @@ let g:vim_indent_cont = &sw " Set line continuation indentation to shiftwidth.
 set list " Enable the list mode in order to show tab and space as characters.
 set listchars=tab:\|\ ,trail:- " change tab and trail spaces to >- and - chars.
 set foldmethod=indent " Set the default fold method to indent.
-" }}}
+set foldlevel=3 " Define the fold level to start closing dinamically.
 
+" }}}
 " Advanced Settings
 " {{{1
 
@@ -58,7 +59,7 @@ augroup advanced
     autocmd!
     " Jump to the last cursor posiion when you reopen a file.
     autocmd BufRead * :normal! `"
-     " Open all indented folds.
+     " Open all indented folds and set the maximun fold level.
     autocmd BufRead * :normal! zR
      " Jump to the last edited position when sourcing .vimrc.
     autocm SourcePost * :silent! normal! `.
@@ -78,10 +79,11 @@ augroup advanced
     \|       call SuperTabChain(&omnifunc, "<C-n>")
     \| endif
 augroup END
-" 1}}}
 
+" 1}}}
 " Specific Settings
 " {{{1
+
 " Plugin Manager Pathogen settings.
 " Load plugins to vim runtime.
 execute pathogen#infect('bundle/{}')
@@ -141,13 +143,14 @@ augroup filetype_commands
     " Stop vim from autocommenting on vimscripts.
     autocmd Filetype vim setlocal formatoptions-=cro foldmethod=marker
     " Set indentation of 2 spaces for javascript.
+    " Open all folds when detecting these filetypes.
     autocmd Filetype javascript,javascriptreact,json,html,xhtml setlocal tabstop=2 shiftwidth=2
     \| execute "normal zR"
 augroup END
+
 " 2}}}
 " 1}}}
-
-" Ke Mappings
+" Key Mappings
 " {{{1
 
 " General
@@ -160,10 +163,10 @@ let mapleader = " "
 " Movement pending copy and cut.
 noremap <leader>c "+y
 noremap <leader>x "+d
-" Paste content after the cursor.
+" Paste content after the cursor and ajust indentation.
+noremap p p=`]
 noremap <leader>v "+p
 "2}}}
-
 " Insert mode
 " {{{2
 
@@ -188,8 +191,8 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " inoremap [<CR> [<CR>]<Esc>O
 " inoremap (<CR> (<CR>)<Esc>O
 " inoremap ><CR>    ><CR><Esc>O
-" 2}}}
 
+" 2}}}
 " Normal mode
 " {{{2
 
@@ -248,7 +251,6 @@ nnoremap <leader>sh :!clear && shellcheck %<CR>
 " nnoremap <leader>exp :NERDTree<CR>
 
 " 2}}}
-
 " Command line mode
 " {{{2
 " Go to the beggining of the line.
@@ -306,5 +308,6 @@ endfunction
 " Call the fix so the it object runs as expected.
 omap it :normal vit<CR>
 vnoremap it it:<C-u>call FixInnerTag()<CR>
+
 " 2}}}
 " 1}}}
