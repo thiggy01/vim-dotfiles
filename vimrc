@@ -128,12 +128,6 @@ let g:netrw_winsize = 25
 " include js and jsx filetypes to autoclose tags.
 let g:closetag_filenames = '*.htm, *.html, *.xhtml, *.phtml, *.js, *.jsx'
 
-" Draw a NERDTree explorer when opening something with vim.
-" augroup project_explorer
-"   autocmd!
-"   autocmd VimEnter * :NERDTree
-" augroup END
-
 " Filetype settings.
 " {{{2
 
@@ -239,16 +233,8 @@ nnoremap <leader>q :q!<CR>
 nnoremap <leader>y "0y
 nnoremap <leader>d "0d
 
-" Shell script settings.
-"Comment/uncomment multiple shell script lines.
-" nnoremap <leader>\ :normal! i# <CR>
-" nnoremap <leader>n\ :normal! 2x<CR>
-
 " Inspect shell scripts syntax in shellcheck.
 nnoremap <leader>sh :!clear && shellcheck %<CR>
-
-" " Open NEEDTree explorer.
-" nnoremap <leader>exp :NERDTree<CR>
 
 " 2}}}
 " Command line mode
