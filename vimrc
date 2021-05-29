@@ -35,7 +35,7 @@ let g:vim_indent_cont = &sw " Set line continuation indentation to shiftwidth.
 set list " Enable the list mode in order to show tab and space as characters.
 set listchars=tab:\|\ ,trail:- " change tab and trail spaces to >- and - chars.
 set foldmethod=indent " Set the default fold method to indent.
-set foldlevel=3 " Define the fold level to start closing dinamically.
+set foldlevel=4 " Define the fold level to start closing folds dinamically.
 
 " }}}
 " Advanced Settings
@@ -136,10 +136,11 @@ augroup filetype_commands
     autocm!
     " Stop vim from autocommenting on vimscripts.
     autocmd Filetype vim setlocal formatoptions-=cro foldmethod=marker
-    " Set indentation of 2 spaces for javascript.
+    " Set indentation of 2 spaces for these filetypes.
     " Open all folds when detecting these filetypes.
-    autocmd Filetype javascript,javascriptreact,json,html,xhtml setlocal tabstop=2 shiftwidth=2
-    \| execute "normal zR"
+    " Set fold level to dinamically close folds.
+    autocmd Filetype javascript,javascriptreact,json,html,xhtml
+    \| setlocal tabstop=2 shiftwidth=2 foldlevel=99
 augroup END
 
 " 2}}}
@@ -160,6 +161,7 @@ noremap <leader>x "+d
 " Paste content after the cursor and ajust indentation.
 noremap p p=`]
 noremap <leader>v "+p
+
 "2}}}
 " Insert mode
 " {{{2
@@ -179,12 +181,6 @@ inoremap <C-x>l <C-x><C-l>
 inoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
 " Select the highlighted item on the popup menu with Enter.
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
-" " Braces, brackets and parentheses expansion.
-" inoremap {<CR> {<CR>}<Esc>O
-" inoremap [<CR> [<CR>]<Esc>O
-" inoremap (<CR> (<CR>)<Esc>O
-" inoremap ><CR>    ><CR><Esc>O
 
 " 2}}}
 " Normal mode
@@ -257,7 +253,6 @@ cnoremap <A-b> <S-Left>
 " Delete the character under the cursos.
 cnoremap <C-d> <Del>
 " 2}}}
-
 " Complex
 " {{{2
 " Fix the behavior of the inner tag object to indent as expected.
@@ -295,5 +290,17 @@ endfunction
 omap it :normal vit<CR>
 vnoremap it it:<C-u>call FixInnerTag()<CR>
 
+" Toggle auto closing brackets, parentheses, etc with lexima plugin.
+let b:lexima_disabled = 0
+function! ToggleLexima()
+    if b:lexima_disabled == 0
+        let b:lexima_disabled = 1
+        echo "lexima disabled"
+    else
+        let b:lexima_disabled = 0
+        echo "lexima enabled"
+    endif
+endfunction
+nnoremap <F2> :call ToggleLexima()<CR>
 " 2}}}
 " 1}}}
