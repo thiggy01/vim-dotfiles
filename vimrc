@@ -131,9 +131,10 @@ let g:netrw_winsize = 25
 " include js and jsx filetypes to autoclose tags.
 let g:closetag_filenames = '*.htm, *.html, *.xhtml, *.phtml, *.js, *.jsx'
 
-" Change goyo default options.
+" Change goyo(distraction free writing) default options.
 let g:goyo_width = 100
-let g:goyo_heigth = '100%'
+let g:goyo_margin_top = 0
+let g:goyo_margin_bottom = 0
 nnoremap <F3> :Goyo<CR>
 
 " youcompleteme asynchronous completion configuration.
