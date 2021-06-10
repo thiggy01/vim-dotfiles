@@ -1,0 +1,13 @@
+{
+  "libs": [
+    "browser",
+    "emascript",
+    "jquery",
+    "react",
+    "underscore"
+  ],
+  "plugins": {
+    "node": {},
+    "esmodules": {}
+  }
+}

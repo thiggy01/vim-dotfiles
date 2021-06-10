@@ -47,9 +47,6 @@ filetype plugin indent on
 " Set syntax highlighting on.
 syntax enable
 
-" Remove a preview window during autocompletion.
-set completeopt-=preview
-
 " Highlight the cursor line background.
 highlight CursorLine term=bold cterm=bold ctermbg=238
 highlight CursorLineNr term=bold cterm=bold ctermbg=238
@@ -132,6 +129,15 @@ let g:closetag_filenames = '*.htm, *.html, *.xhtml, *.phtml, *.js, *.jsx'
 let g:goyo_width = 100
 let g:goyo_heigth = '100%'
 nnoremap <F3> :Goyo<CR>
+
+" youcompleteme asynchronous completion configuration.
+" Start autocompletion after 4 chars
+let g:ycm_min_num_of_chars_for_completion = 4
+" let g:ycm_min_num_identifier_candidate_chars = 4
+" let g:ycm_enable_diagnostic_highlighting = 0
+" Don't show YCM's preview window
+set completeopt-=preview
+let g:ycm_add_preview_to_completeopt = 0
 
 " Filetype settings.
 " {{{2
