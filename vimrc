@@ -128,13 +128,10 @@ let g:netrw_winsize = 25
 " include js and jsx filetypes to autoclose tags.
 let g:closetag_filenames = '*.htm, *.html, *.xhtml, *.phtml, *.js, *.jsx'
 
-" Change Goyo default options.
+" Change goyo default options.
 let g:goyo_width = 100
 let g:goyo_heigth = '100%'
 nnoremap <F3> :Goyo<CR>
-
-" Initialize deoplete.
-let g:deoplete#enable_at_startup = 1
 
 " Filetype settings.
 " {{{2
@@ -187,9 +184,9 @@ inoremap <C-x>n <C-x><C-n>
 inoremap <C-x>l <C-x><C-l>
 
 " Exit the completion popup menu with Esc.
-inoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
+" inoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
 " Select the highlighted item on the popup menu with Enter.
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " 2}}}
 " Normal mode
