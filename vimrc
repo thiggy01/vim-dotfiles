@@ -68,13 +68,13 @@ augroup advanced
     autocmd ColorScheme * highlight CursorLine term=bold cterm=bold ctermbg=238
     autocmd ColorScheme * highlight CursorLineNr term=bold cterm=bold ctermbg=238
     " Set the auto-complete configuration.
-    autocmd Filetype *
-    \| if &omnifunc == ""
-    \|       setlocal omnifunc=syntaxcomplete#Complete
-    \| endif
-    \| if &omnifunc != ''
-    \|       call SuperTabChain(&omnifunc, "<C-n>")
-    \| endif
+    " autocmd Filetype *
+    " \| if &omnifunc == ""
+    " \|       setlocal omnifunc=syntaxcomplete#Complete
+    " \| endif
+    " \| if &omnifunc != ''
+    " \|       call SuperTabChain(&omnifunc, "<C-n>")
+    " \| endif
 augroup END
 
 " 1}}}
@@ -89,13 +89,19 @@ execute pathogen#helptags()
 
 " Clang Complete settings.
 " Path to acess clang library directly for clang completion plugin.
-let g:clang_library_path = '/usr/lib/llvm-10/lib/libclang.so.1'
+" let g:clang_library_path = '/usr/lib/llvm-10/lib/libclang.so.1'
 " Use snippets to add argument placeholders to code.
-let g:clang_snippets = 1
+" let g:clang_snippets = 1
 
-" Supertab settings.
-" Set the default completion to the file context.
-let g:SuperTabDefaultCompletionType = "<C-x><C-o>"
+" Make YCM compatible with UltiSnips (using supertab)
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = "<C-n>"
+
+" Better key bindings for UltiSnips.
+let g:UltiSnipsExpandTrigger = "<Tab>"
+let g:UltiSnipsJumpForwardTrigger = "<Tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
 
 " Vim Airline settings.
 " Enable smarter tab line.
@@ -132,7 +138,7 @@ nnoremap <F3> :Goyo<CR>
 
 " youcompleteme asynchronous completion configuration.
 " Start autocompletion after 4 chars
-let g:ycm_min_num_of_chars_for_completion = 4
+" let g:ycm_min_num_of_chars_for_completion = 4
 " let g:ycm_min_num_identifier_candidate_chars = 4
 " let g:ycm_enable_diagnostic_highlighting = 0
 " Don't show YCM's preview window
